@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.beers.BeersFragment">
+
+    <GridView
+        android:id="@+id/beersGridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:layout_marginHorizontal="16dp"
+        android:horizontalSpacing="8dp"
+        android:verticalSpacing="8dp" />
+
+    <!-- Con include apilamos un archivo de layout en el FrameLayout que contendra los fragmentos -->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
