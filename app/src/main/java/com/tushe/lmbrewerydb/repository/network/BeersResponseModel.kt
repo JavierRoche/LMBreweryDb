@@ -1,11 +1,7 @@
 package com.tushe.lmbrewerydb.repository.network
 
-import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 // Sino reconoce esta libreria es que faltan las dependencias de Retrofit
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 data class BeersResponseModel(

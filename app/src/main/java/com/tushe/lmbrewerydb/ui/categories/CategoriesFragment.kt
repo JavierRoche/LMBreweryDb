@@ -33,7 +33,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.TapDelegate {
      */
 
     companion object {
-        const val EXTRA_CATEGORY_ID = "CATEGORY_ID"
+        const val OBJECT_SERIALIZABLE = "EXTRA_OBJECT_SERIALIZABLE"
         const val onFailureMessage = "Something bad happened. Refresh list."
         // Instancia estatica del fragmento
         fun newInstance(): CategoriesFragment {
@@ -93,11 +93,11 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.TapDelegate {
      * USER INTERACTIONS PROTOCOL
      */
 
-    override fun onItemTap(categoryId: Int) {
+    override fun onItemTap(category: Category) {
         // Llamamos a la actividad de detalle pasandole la categoria seleccionada como objeto serializable
         activity?.let {
             Intent(it, BeersActivity::class.java).apply {
-                putExtra(EXTRA_CATEGORY_ID, categoryId)
+                putExtra(OBJECT_SERIALIZABLE, category)
                 it.startActivity(this)
             }
         }

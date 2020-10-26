@@ -55,12 +55,18 @@ class BeersViewModel(private val context: Application) : ViewModel() {
     fun checkLocalDB(remoteBeersList: List<BeerResponse>) : List<Beer> {
         // Conseguimos una lista de beers definitiva conforme a si existe la BD en Room
         val roomBeersList = BeersRoom.getDBInstance(context).dataAccessObject().selectBeers()
-        if (roomBeersList.isEmpty()) {
-            beersList = saveBeers(remoteBeersList)
-        } else {
-            beersList = roomBeersList
-        }
+        beersList = if (roomBeersList.isEmpty()) {
+            saveBeers(remoteBeersList)
+        } else roomBeersList
         return beersList
+    }
+
+    fun filterByCategory(categoryId: Int?, beersList: List<Beer>): List<Beer> {
+        val filteredBeersList: MutableList<Beer> = arrayListOf()
+        beersList.map {
+            if (it.styleIdTB == categoryId) filteredBeersList.add(0, it)
+        }
+        return filteredBeersList
     }
 
 

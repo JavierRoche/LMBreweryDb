@@ -11,8 +11,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.tushe.lmbrewerydb.R
 import com.tushe.lmbrewerydb.repository.model.Beer
 import kotlinx.android.synthetic.main.beer_cell.view.*
-import kotlinx.android.synthetic.main.beer_cell.view.productTextView
-import kotlinx.android.synthetic.main.detail_activity.view.*
 
 class BeersAdapter(private val context: Context,
                    private val tapCellDelegate: TapDelegate,
@@ -42,7 +40,7 @@ class BeersAdapter(private val context: Context,
         return position.toLong()
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "ViewHolder", "InflateParams")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val beer = this.beersList[position]
         val inflator = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -50,11 +48,14 @@ class BeersAdapter(private val context: Context,
 
         // Fijamos la informacion de la cerveza
         cell.productTextView.text = beer.nameTB
+        if (beer.favoriteTB) {
+            cell.favoriteImage.setImageResource(R.drawable.ic_favorite_accent_24)
+        } else cell.favoriteImage.setImageResource(R.drawable.ic_no_favorite_accent_24)
 
         // Fijamos la imagen recuperada en formato url con Glide
         Glide.with(context)
-            .load(beer.mediumTB)
-            .apply(RequestOptions().placeholder((R.drawable.ic_launcher_background)))
+            .load(beer.iconTB)
+            .apply(RequestOptions().placeholder((R.mipmap.ic_default_beer)))
             .into(cell.photoImageView)
 
         cell.setOnClickListener {
@@ -62,5 +63,16 @@ class BeersAdapter(private val context: Context,
         }
 
         return cell
+    }
+
+
+    /**
+     * PUBLIC FUNCTIONS
+     */
+
+    // Metodo que repinta el modelo
+    fun setChanges(beersList: List<Beer>) {
+        this.beersList = beersList
+        notifyDataSetChanged()
     }
 }

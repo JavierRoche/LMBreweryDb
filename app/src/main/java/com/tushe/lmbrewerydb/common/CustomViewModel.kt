@@ -3,7 +3,7 @@ package com.tushe.lmbrewerydb.common
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.cocktailclub.ui.detail.DetailViewModel
+import com.tushe.lmbrewerydb.ui.detail.DetailViewModel
 import com.tushe.lmbrewerydb.ui.beers.BeersViewModel
 import com.tushe.lmbrewerydb.ui.categories.CategoriesViewModel
 import java.lang.IllegalArgumentException

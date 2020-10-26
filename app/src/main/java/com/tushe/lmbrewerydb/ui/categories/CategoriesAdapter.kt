@@ -15,7 +15,7 @@ class CategoriesAdapter(private val selectedCellDelegate: TapDelegate,
      */
 
     interface TapDelegate {
-        fun onItemTap(categoryId: Int)
+        fun onItemTap(category: Category)
     }
 
 
@@ -39,7 +39,7 @@ class CategoriesAdapter(private val selectedCellDelegate: TapDelegate,
 
         // Listener que escucha el tap en cada celda
         holder.view.setOnClickListener{
-            selectedCellDelegate.onItemTap(category.id)
+            selectedCellDelegate.onItemTap(category)
         }
     }
 

@@ -11,7 +11,6 @@ class BreweryDBApiService {
     val categoriesApiService: AllCategoriesApi
     val beersApiService: AllBeersApi
 
-
     /**
      * DELEGATE PROTOCOL
      */

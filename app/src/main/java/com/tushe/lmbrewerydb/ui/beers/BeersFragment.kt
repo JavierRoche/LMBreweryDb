@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.cocktailclub.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 import com.tushe.lmbrewerydb.R
 import com.tushe.lmbrewerydb.common.CustomViewModel
 import com.tushe.lmbrewerydb.repository.model.Beer
 import com.tushe.lmbrewerydb.repository.network.BeerResponse
 import com.tushe.lmbrewerydb.repository.network.BreweryDBApiService
+import com.tushe.lmbrewerydb.repository.network.Category
+import com.tushe.lmbrewerydb.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.beers_fragment.*
 import kotlinx.android.synthetic.main.categories_activity.*
 import retrofit2.Response
@@ -21,6 +22,8 @@ import retrofit2.Response
 class BeersFragment : Fragment() , BeersAdapter.TapDelegate {
     // Para usar el adaptador y sus layouts
     private lateinit var adapter: BeersAdapter
+    // Categoria actual
+    private var currentCategoryID: Int? = null
     // Instancia del viewModel
     private val viewmodel: BeersViewModel by lazy {
         val factory = CustomViewModel(activity!!.application)
@@ -33,15 +36,14 @@ class BeersFragment : Fragment() , BeersAdapter.TapDelegate {
      */
 
     companion object {
-        const val EXTRA_CATEGORY_ID = "CATEGORY_ID"
         const val OBJECT_SERIALIZABLE = "EXTRA_OBJECT_SERIALIZABLE"
         const val onFailureMessage = "Something bad happened. Refresh list."
         // Instancia estatica del fragmento
-        fun newInstance(categoryId: Int): BeersFragment {
+        fun newInstance(category: Category): BeersFragment {
             val fragment = BeersFragment()
             val arguments = Bundle()
             // Recibimos el argumento desde la actividad a traves de un Bundle
-            arguments.putInt(EXTRA_CATEGORY_ID, categoryId)
+            arguments.putSerializable(OBJECT_SERIALIZABLE, category)
             fragment.arguments = arguments
             return fragment
         }
@@ -61,12 +63,25 @@ class BeersFragment : Fragment() , BeersAdapter.TapDelegate {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Guardamos en la variable local el numero de topic que se pulso
-        val categoryId = this.arguments?.getInt(EXTRA_CATEGORY_ID)
-        val beer = this.arguments?.getInt(EXTRA_CATEGORY_ID)
-        remoteAccess(categoryId)
+        // Intentamos recuperar la categoria de los argumentos
+        val category = this.arguments?.getSerializable(OBJECT_SERIALIZABLE) as Category
+
+        remoteAccess(category.id)
         // Fijamos el titulo del topic en la parte superior del fragmento
-        activity?.title = categoryId.toString()
+        activity?.title = category.shortName
+    }
+
+
+    /**
+     * PUBLIC FUNCTIONS
+     */
+
+    fun changesOnBeersList() {
+        val emptyList: List<BeerResponse> = emptyList()
+        // La actividad nos notifica de la vuelta de la vista de detalle
+        val beersList: List<Beer> = viewmodel.filterByCategory(currentCategoryID, viewmodel.checkLocalDB(emptyList))
+        // Pasamos al adaptador la lista actualizada
+        (beersGridView.adapter as BeersAdapter).setChanges(beersList)
     }
 
 
@@ -75,13 +90,12 @@ class BeersFragment : Fragment() , BeersAdapter.TapDelegate {
      */
 
     private fun remoteAccess(categoryId: Int?) {
+        currentCategoryID = categoryId
         // Pedimos al viewmodel la lista de cervezas
         viewmodel.getBeersList(object: BreweryDBApiService.CallbackResponse<List<BeerResponse>> {
             override fun onResponse(response: List<BeerResponse>) {
-                // Obtenemos lista definitiva con las beers de la categoria recibida
-
                 // Comprobamos la BD local antes de informar la UI
-                initUI(viewmodel.checkLocalDB(response))
+                initUI(viewmodel.filterByCategory(categoryId, viewmodel.checkLocalDB(response)))
             }
 
             override fun onFailure(t: Throwable, res: Response<*>?) {
@@ -109,7 +123,7 @@ class BeersFragment : Fragment() , BeersAdapter.TapDelegate {
         activity?.let {
             Intent(it, DetailActivity::class.java).apply {
                 putExtra(OBJECT_SERIALIZABLE, beer)
-                it.startActivity(this)
+                it.startActivityForResult(this, 100)
             }
         }
     }

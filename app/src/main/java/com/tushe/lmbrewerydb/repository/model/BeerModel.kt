@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.tushe.lmbrewerydb.repository.network.BeerResponse
 import kotlinx.android.parcel.Parcelize
 
-
 @Parcelize
 // Para transformar la response del api en una tabla de Room
 @Entity(tableName = "beers_tb")
@@ -29,6 +28,11 @@ data class Beer (
 
     // Los metodos aqui incluidos estan declarados en un contexto estatico
     companion object {
+        /**
+         * PUBLIC FUNCTIONS
+         */
+
+        // Transforma el modelo de respuesta del servidor en una tupla plana para poder insertar en Room
         fun parseBeersList(beersList: List<BeerResponse>): List<Beer> {
             // Definimos la lista mutable del modelo de datos
             val beers = mutableListOf<Beer>()
@@ -36,14 +40,15 @@ data class Beer (
             beersList.map { item ->
                 beers.add(parseBeer(item))
             }
-
             return beers
         }
 
-        private fun parseBeer(beerResponse: BeerResponse): Beer {
-            //val auxDescription: String = beerResponse.description ?: ""
-            //val auxStyleId: Int = beerResponse.styleId ?: 0
 
+        /**
+         * PRIVATE FUNCTIONS
+         */
+
+        private fun parseBeer(beerResponse: BeerResponse): Beer {
             // Devolvemos el modelo de datos del topic con los datos extraidos del BeerResponse
             return Beer(
                 idTB = beerResponse.id ?: "",

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.categories.CategoriesActivity">
+        <activity android:name=".ui.categories.CategoriesActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,11 +22,10 @@
 
         <activity
             android:name="com.tushe.lmbrewerydb.ui.beers.BeersActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.example.cocktailclub.ui.detail.DetailActivity"
+            android:name="com.tushe.lmbrewerydb.ui.detail.DetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

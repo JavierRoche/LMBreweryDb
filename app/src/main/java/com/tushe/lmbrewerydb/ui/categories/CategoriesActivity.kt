@@ -1,8 +1,7 @@
 package com.tushe.lmbrewerydb.ui.categories
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.tushe.lmbrewerydb.R
 
 class CategoriesActivity : AppCompatActivity() {

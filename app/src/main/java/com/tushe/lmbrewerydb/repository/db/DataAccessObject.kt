@@ -15,7 +15,4 @@ abstract class DataAccessObject {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertBeer(beer: Beer)
-/*
-    @Delete
-    abstract fun deleteCocktail(cocktail: DrinksItem)
-*/}
+}

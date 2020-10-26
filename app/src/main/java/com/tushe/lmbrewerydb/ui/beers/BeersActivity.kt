@@ -1,9 +1,10 @@
 package com.tushe.lmbrewerydb.ui.beers
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.tushe.lmbrewerydb.R
-import com.tushe.lmbrewerydb.ui.categories.CategoriesFragment
+import com.tushe.lmbrewerydb.repository.network.Category
 
 class BeersActivity : AppCompatActivity() {
     /**
@@ -11,7 +12,7 @@ class BeersActivity : AppCompatActivity() {
      */
 
     companion object {
-        const val EXTRA_CATEGORY_ID = "CATEGORY_ID"
+        const val OBJECT_SERIALIZABLE = "EXTRA_OBJECT_SERIALIZABLE"
     }
 
 
@@ -26,11 +27,19 @@ class BeersActivity : AppCompatActivity() {
         setContentView(R.layout.beers_activity)
 
         // Intentamos recuperar la categoria seleccionada
-        val categoryId: Int? = intent.getIntExtra(EXTRA_CATEGORY_ID, 1)
+        val category = intent.extras?.getSerializable(OBJECT_SERIALIZABLE) as Category
 
         // Comprobamos que sea la primera vez que se instancia la clase
-        if (savedInstanceState == null && categoryId != null) {
-            supportFragmentManager.beginTransaction().add(R.id.container, BeersFragment.newInstance(categoryId)).commitNow()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().add(R.id.container, BeersFragment.newInstance(category)).commitNow()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Podemos acceder a una funcion del fragmento a traves del supportFragmentManager
+        if (requestCode == 100)
+            (supportFragmentManager.findFragmentById(R.id.container) as BeersFragment).changesOnBeersList()
     }
 }

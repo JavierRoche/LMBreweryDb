@@ -6,7 +6,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 
 /**
- * ALL CATEGORIES API
+ * ALL BEERS API
  */
 
 interface AllBeersApi {
